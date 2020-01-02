@@ -26,8 +26,9 @@ SECRET_KEY = '^=+xdid@_jb8q%x(&$*$piubypf$^u15r$bh6e6%t#eds+load'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    '192.168.1.6',
+    '192.168.1.4',
     '127.0.0.1',
+    '192.168.43.48',
 ]
 
 
@@ -145,3 +146,4 @@ REST_FRAMEWORK = {
     )
 }
 
+DATE_INPUT_FORMATS = ('%d-%m-%Y','%Y-%m-%d')

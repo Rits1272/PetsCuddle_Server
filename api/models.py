@@ -1,6 +1,7 @@
 from django.db import models
 import os 
 from uuid import uuid4
+from petApi import settings
 
 def photo_path(instance, filename):
     upload_to = 'images/'
@@ -38,3 +39,12 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name 
+
+
+class Appointment(models.Model):
+    problem = models.CharField(max_length=30)
+    description = models.CharField(max_length=200)
+    timeslot = models.DateTimeField(null=False)
+
+    def __str__(self):
+        return self.problem 
