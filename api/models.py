@@ -80,4 +80,16 @@ class Cart(models.Model):
     image = models.TextField()
 
     def __str__(self):
-        return self.username
+        return self.user.username
+
+
+class Profile(models.Model):
+    user = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)
+    pincode = models.CharField(max_length=10, null=False)
+    first_line = models.CharField(max_length=100, null=False)
+    second_line = models.CharField(max_length=100, null=False)
+    phone = models.CharField(max_length=15, null=False)
+    email = models.CharField(max_length=64, null=False)
+
+    def __str__(self):
+        return self.user.username
