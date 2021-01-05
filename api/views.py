@@ -67,15 +67,15 @@ class CartList(ListCreateAPIView):
 
     def post(self, request, username):
         name = request.data.get('name')
-        price = request.data.get('price')
-        category = request.data.get('category')
-        description = request.data.get('description')
-        image = request.data.get('image')
-        user_obj = get_user_model().objects.get(username=username)
 
         if(Cart.objects.filter(name=name).count()):
             Cart.objects.filter(name=name).delete()
         else:
+            price = request.data.get('price')
+            category = request.data.get('category')
+            description = request.data.get('description')
+            image = request.data.get('image')
+            user_obj = get_user_model().objects.get(username=username)
             Cart.objects.create(name=name, price=price, category=category, description=description, image=image, user=user_obj)
         
         return Response(status.HTTP_201_CREATED)

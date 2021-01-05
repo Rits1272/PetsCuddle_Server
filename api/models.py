@@ -3,6 +3,14 @@ import os
 from uuid import uuid4
 from petApi import settings
 from django.contrib.auth import get_user_model
+from twilio.rest import Client
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+ACCOUNT_SID = os.getenv('ACCOUNT_SID')
+AUTH_TOKEN = os.getenv('AUTH_TOKEN')
+
 
 def photo_path(instance, filename):
     upload_to = 'images/'
@@ -48,6 +56,19 @@ class Appointment(models.Model):
 
     def __str__(self):
         return self.problem
+
+    def save(self, *args, **kwargs):
+        account_sid = ACCOUNT_SID
+        auth_token = AUTH_TOKEN 
+        client = Client(account_sid, auth_token)
+
+        message = client.messages.create(
+                body = "You have booked your appointment sucessfully on: " + str(self.timeslot),
+                from_ = '+12063377761',
+                to = '+916264947400'
+                )
+        print("[LOG] Message send succesfully!")
+        return super().save(*args, **kwargs)
 
 
 class Cart(models.Model):
