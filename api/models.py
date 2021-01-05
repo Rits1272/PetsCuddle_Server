@@ -2,6 +2,7 @@ from django.db import models
 import os 
 from uuid import uuid4
 from petApi import settings
+from django.contrib.auth import get_user_model
 
 def photo_path(instance, filename):
     upload_to = 'images/'
@@ -15,7 +16,6 @@ def photo_path(instance, filename):
     return os.path.join(upload_to, filename)
 
 
-# Create your models here.
 class Product(models.Model):
 
     category_choices = [
@@ -47,4 +47,16 @@ class Appointment(models.Model):
     timeslot = models.DateTimeField(null=False)
 
     def __str__(self):
-        return self.problem 
+        return self.problem
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=False)
+    price = models.IntegerField(null=False)
+    category = models.CharField(max_length=50)
+    description = models.TextField()
+    image = models.TextField()
+
+    def __str__(self):
+        return self.username
