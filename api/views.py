@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Product, Appointment, Cart, Profile
 from .serializers import ProductSerializer, AppointmentSerializer, CartSerializer, ProfileSerializer
 from rest_framework.generics import ListCreateAPIView, ListAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
@@ -11,13 +11,13 @@ from rest_framework.response import Response
 class ProductList(ListCreateAPIView):
     queryset = Product.objects.all() 
     serializer_class = ProductSerializer 
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class ProductDetail(ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         return Product.objects.filter(pk=self.kwargs.get('pk'))
@@ -26,37 +26,37 @@ class ProductDetail(ListAPIView):
 class PetFoodList(ListCreateAPIView):
     queryset = Product.objects.filter(category='healthcare')
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class PetMedicineList(ListCreateAPIView):
     queryset = Product.objects.filter(category='medicine')
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class PetParlourList(ListCreateAPIView):
     queryset = Product.objects.filter(category='parlour')
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class PetAccessoriesList(ListCreateAPIView):
     queryset = Product.objects.filter(category='accessories')
     serializer_class = ProductSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class AppointmentList(ListCreateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
 
 class CartList(ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     
     def get_queryset(self):
@@ -84,7 +84,7 @@ class CartList(ListCreateAPIView):
 class ProfileList(ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         username = self.kwargs['username']
