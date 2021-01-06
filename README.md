@@ -9,3 +9,4 @@ The PetsCuddle Server currently exposes the following endpoints:
 - User Profile
 - Authentication (Token Based)
 - Cart List
+- Order List
