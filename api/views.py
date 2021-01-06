@@ -1,12 +1,19 @@
 from django.shortcuts import render
-from .models import Product, Appointment, Cart, Profile
-from .serializers import ProductSerializer, AppointmentSerializer, CartSerializer, ProfileSerializer
+from .models import Product, Appointment, Cart, Profile, Order
+from .serializers import ProductSerializer, AppointmentSerializer, CartSerializer, ProfileSerializer, OrderSerializer
 from rest_framework.generics import ListCreateAPIView, ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework import status
 from django.contrib.auth import get_user_model
 from rest_framework.response import Response
+from twilio.rest import Client
+from dotenv import load_dotenv
+import os
 
+load_dotenv()
+
+ACCOUNT_SID = os.getenv('ACCOUNT_SID')
+AUTH_TOKEN = os.getenv('AUTH_TOKEN')
 
 class ProductList(ListCreateAPIView):
     queryset = Product.objects.all() 
@@ -46,7 +53,7 @@ class PetAccessoriesList(ListCreateAPIView):
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
 
-
+  
 class AppointmentList(ListCreateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
@@ -114,3 +121,41 @@ class ProfileList(ListCreateAPIView):
 
         return Response(status.HTTP_201_CREATED)
 
+
+class OrderList(ListCreateAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+
+    def get_queryset(self):
+        username = self.kwargs['username']
+        user_obj = get_user_model().objects.get(username=username)
+        return Order.objects.filter(user=user_obj)
+
+
+    def post(self, request, username):
+        name = request.data.get('name')
+
+        if(Order.objects.filter(name=name).count()):
+            Order.objects.filter(name=name).delete()
+        else:
+            price = request.data.get('price')
+            category = request.data.get('category')
+            description = request.data.get('description')
+            image = request.data.get('image')
+            user_obj = get_user_model().objects.get(username=username)
+            Order.objects.create(name=name, price=price, category=category, description=description, image=image, user=user_obj)
+        
+            account_sid = ACCOUNT_SID
+            auth_token = AUTH_TOKEN 
+            client = Client(account_sid, auth_token)
+
+            message = client.messages.create(
+                body = "Your order : " + name + " of price: " + str(price) + " has been ordered successfully!" ,
+                from_ = '+12063377761',
+                to = '+916264947400'
+            )
+            print("[LOG] Message sent successfully")
+
+        return Response(status.HTTP_201_CREATED)

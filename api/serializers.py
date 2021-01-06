@@ -1,5 +1,5 @@
 from rest_framework.serializers import ModelSerializer
-from .models import Product, Appointment, Cart, Profile
+from .models import Product, Appointment, Cart, Profile, Order
 
 
 class ProductSerializer(ModelSerializer):
@@ -25,3 +25,8 @@ class ProfileSerializer(ModelSerializer):
         model = Profile
         fields = '__all__'
 
+
+class OrderSerializer(ModelSerializer):
+    class Meta:
+        model = Order
+        fields = '__all__'

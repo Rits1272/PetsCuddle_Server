@@ -83,6 +83,18 @@ class Cart(models.Model):
         return self.user.username
 
 
+class Order(models.Model):
+    user = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50, null=False)
+    price = models.IntegerField(null=False)
+    category = models.CharField(max_length=50)
+    description = models.TextField()
+    image = models.TextField()
+
+    def __str__(self):
+        return self.user.username
+
+
 class Profile(models.Model):
     user = models.ForeignKey(get_user_model(), null=True, on_delete=models.CASCADE)
     pincode = models.CharField(max_length=10, null=False)
